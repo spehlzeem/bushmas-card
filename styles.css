@@ -460,18 +460,30 @@ main {
 .timeline-track {
     position: relative;
     padding-left: 0;
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
-    /* Create a "string" line down the center */
-    background: repeating-linear-gradient(180deg, #d8a846 0, #d8a846 4px, transparent 4px, transparent 8px);
+    width: 100%;
+    /* Now acts as a container */
+}
+
+/* Move the string line to a pseudo-element so it doesn't constrain content width */
+.timeline-track::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
     width: 2px;
+    margin-left: -1px;
+    /* Center perfectly */
+    background: repeating-linear-gradient(180deg, #d8a846 0, #d8a846 4px, transparent 4px, transparent 8px);
+    z-index: 0;
 }
 
 .scrapbook-item {
     position: relative;
     margin: 0 auto 3rem;
-    width: fit-content;
-    /* Clear the float/flex */
+    /* width: fit-content;  <-- Removed to allow full width expansion */
     display: block;
 }
 
@@ -507,21 +519,40 @@ main {
     padding: 1.5rem 2rem;
     box-shadow: 0 4px 15px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
     transform: rotate(-1deg);
-    max-width: 480px;
-    /* Widened from 320px */
+    max-width: 650px;
+    /* Widened from 480px */
     text-align: center;
     border: 1px solid rgba(0, 0, 0, 0.06);
     /* Torn paper effect if possible, or just rough border */
     border-radius: 1px;
+    margin: 0 auto;
+    /* Center in the relative item */
 }
 
 /* Mobile Timeline Fixes */
 @media (max-width: 720px) {
+    .card-shell {
+        padding: 1.5rem 1rem !important;
+        /* Reduce shell padding */
+    }
+
+    main {
+        padding: 0 !important;
+        /* Remove main padding on mobile to let content go edge-to-edge relative to shell */
+    }
+
+    .section {
+        margin: 3rem 0;
+        /* Reduce section vertical spacing */
+    }
+
     .scrapbook-item {
-        margin: 0 auto 2.5rem !important;
-        /* Reset margins */
+        margin: 0 auto 2rem !important;
         margin-left: auto !important;
         margin-right: auto !important;
+        width: 100%;
+        padding: 0;
+        /* Remove extra padding on the item wrapper */
     }
 
     .timeline-track {
@@ -529,9 +560,13 @@ main {
     }
 
     .paper-scrap {
-        max-width: 90%;
-        /* Ensure it fits on small screens */
+        max-width: 100%;
         margin: 0 auto;
+        padding: 1.25rem 1rem;
+        /* Slightly tighter padding inside the scrap */
+        width: 100%;
+        /* Ensure it fills container */
+        box-sizing: border-box;
     }
 }
 
